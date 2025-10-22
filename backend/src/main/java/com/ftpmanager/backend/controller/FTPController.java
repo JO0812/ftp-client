@@ -1,6 +1,8 @@
 package com.ftpmanager.backend.controller;
 
+import com.ftpmanager.backend.model.DirectoryRequest;
 import com.ftpmanager.backend.model.FTPConnectionRequest;
+import com.ftpmanager.backend.model.FileRequest;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,8 +31,8 @@ public class FTPController {
 	}
 
 	@PostMapping("/change-directory")
-	public String changeDirectory() {
-		return "Changing directory in the ftp server";
+	public String changeDirectory(@RequestBody DirectoryRequest request) {
+		return "Changing to directory: " + request.getPath();
 	}
 
 	@PostMapping("/upload")
@@ -39,13 +41,13 @@ public class FTPController {
 	}
 
 	@GetMapping("/download")
-	public String download() {
-		return "File downloaded from the ftp server";
+	public String download(@RequestBody FileRequest request) {
+		return "Downloading file: " + request.getFilepath();
 	}
 
 	@DeleteMapping("/delete")
-	public String delete() {
-		return "File deleted from the ftp server";
+	public String delete(@RequestBody FileRequest request) {
+		return "Deleting file: " + request.getFilepath();
 	}
 
 }
