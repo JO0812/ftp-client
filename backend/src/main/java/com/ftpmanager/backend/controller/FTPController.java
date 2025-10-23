@@ -1,5 +1,6 @@
 package com.ftpmanager.backend.controller;
 
+import com.ftpmanager.backend.model.ApiResponse;
 import com.ftpmanager.backend.model.DirectoryRequest;
 import com.ftpmanager.backend.model.FTPConnectionRequest;
 import com.ftpmanager.backend.model.FileRequest;
@@ -10,9 +11,11 @@ import org.springframework.web.bind.annotation.*;
 public class FTPController {
 
 	@PostMapping("/connect")
-	public String connect(@RequestBody FTPConnectionRequest request) {
-		return "Connecting to " + request.getHost() +
-				" with user " + request.getUsername();
+	public ApiResponse connect(@RequestBody FTPConnectionRequest request) {
+		ApiResponse response = new ApiResponse();
+		response.setSuccess(true);
+		response.setMessage("Connected to " + request.getHost());
+		return response;
 	}
 
 	@PostMapping("/disconnect")

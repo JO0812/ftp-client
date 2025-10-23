@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class FileRequest {
-	public String filepath;
+	private String filepath;
 }
