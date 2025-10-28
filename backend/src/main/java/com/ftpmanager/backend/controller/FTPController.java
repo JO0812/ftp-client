@@ -19,7 +19,7 @@ public class FTPController {
 	}
 
 	@PostMapping("/disconnect")
-	public ApiResponse disconnect(@RequestBody FTPConnectionInfo request) {
+	public ApiResponse disconnect(FTPConnectionInfo request) {
 		ApiResponse response = new ApiResponse();
 		response.setSuccess(true);
 		response.setMessage("Disconnected from " + request.getHost());
@@ -36,7 +36,7 @@ public class FTPController {
 	}
 
 	@GetMapping("/files")
-	public FileListResponse ListFiles() {
+	public FileListResponse listFiles() {
 		FileListResponse response = new FileListResponse();
 		List<FileInfo> fileList = new ArrayList<>();
 
@@ -86,7 +86,7 @@ public class FTPController {
 		return response;
 	}
 
-	@PostMapping("/download")
+	@GetMapping("/download")
 	public ApiResponse download(@RequestBody FileRequest request) {
 		ApiResponse response = new ApiResponse();
 		response.setSuccess(true);
