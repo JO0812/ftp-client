@@ -1,17 +1,17 @@
 package com.ftpmanager.backend.controller;
 
-import com.ftpmanager.backend.model.ApiResponse;
-import com.ftpmanager.backend.model.DirectoryRequest;
-import com.ftpmanager.backend.model.FTPConnectionRequest;
-import com.ftpmanager.backend.model.FileRequest;
+import com.ftpmanager.backend.model.*;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/ftp")
 public class FTPController {
 
 	@PostMapping("/connect")
-	public ApiResponse connect(@RequestBody FTPConnectionRequest request) {
+	public ApiResponse connect(@RequestBody FTPConnectionInfo request) {
 		ApiResponse response = new ApiResponse();
 		response.setSuccess(true);
 		response.setMessage("Connected to " + request.getHost());
@@ -19,38 +19,86 @@ public class FTPController {
 	}
 
 	@PostMapping("/disconnect")
-	public String disconnect() {
-		return "Disconnecting from ftp server";
+	public ApiResponse disconnect(@RequestBody FTPConnectionInfo request) {
+		ApiResponse response = new ApiResponse();
+		response.setSuccess(true);
+		response.setMessage("Disconnected from " + request.getHost());
+		return response;
 	}
 
 	@GetMapping("/status")
-	public String status() {
-		return "Conection status";
+	public ConnectionStatusResponse status() {
+		ConnectionStatusResponse response = new ConnectionStatusResponse();
+		response.setConnected(true);
+		response.setHost("ftp.example.com");
+		response.setCurrentDirectory("/home/usr");
+		return response;
 	}
 
 	@GetMapping("/files")
-	public String files() {
-		return "Files in the ftp server";
+	public FileListResponse ListFiles() {
+		FileListResponse response = new FileListResponse();
+		List<FileInfo> fileList = new ArrayList<>();
+
+		// Create first file (a PDF document)
+		FileInfo file1 = new FileInfo();
+		file1.setName("document.pdf");
+		file1.setSize(2048);
+		file1.setDirectory(false);
+		file1.setLastModified("2024-10-23 14:30:00");
+		fileList.add(file1);
+
+		// Create second file (a folder)
+		FileInfo file2 = new FileInfo();
+		file2.setName("photos");
+		file2.setSize(0);
+		file2.setDirectory(true);
+		file2.setLastModified("2024-10-20 10:15:00");
+		fileList.add(file2);
+
+		// Create third file (a text file)
+		FileInfo file3 = new FileInfo();
+		file3.setName("readme.txt");
+		file3.setSize(512);
+		file3.setDirectory(false);
+		file3.setLastModified("2024-10-22 09:00:00");
+		fileList.add(file3);
+
+		response.setFiles(fileList);
+		response.setCurrentPath("/home/user/documents");
+
+		return response;
 	}
 
 	@PostMapping("/change-directory")
-	public String changeDirectory(@RequestBody DirectoryRequest request) {
-		return "Changing to directory: " + request.getPath();
+	public ApiResponse changeDirectory(@RequestBody DirectoryRequest request) {
+		ApiResponse response = new ApiResponse();
+		response.setSuccess(true);
+		response.setMessage("Changed dir to " + request.getPath());
+		return response;
 	}
 
 	@PostMapping("/upload")
-	public String upload() {
-		return "File uploaded to the ftp server";
+	public ApiResponse upload(@RequestBody FileRequest request) {
+		ApiResponse response = new ApiResponse();
+		response.setSuccess(true);
+		response.setMessage("Uploaded file to " + request.getFilepath());
+		return response;
 	}
 
-	@GetMapping("/download")
-	public String download(@RequestBody FileRequest request) {
-		return "Downloading file: " + request.getFilepath();
+	@PostMapping("/download")
+	public ApiResponse download(@RequestBody FileRequest request) {
+		ApiResponse response = new ApiResponse();
+		response.setSuccess(true);
+		response.setMessage("Downloaded file " + request.getFilepath());
+		return response;
 	}
 
 	@DeleteMapping("/delete")
-	public String delete(@RequestBody FileRequest request) {
-		return "Deleting file: " + request.getFilepath();
+	public ApiResponse delete(@RequestBody FileRequest request) {
+		ApiResponse response = new ApiResponse();
+		response.setSuccess(true);
+		response.setMessage("Deleted file " + request.getFilepath());
+		return response;
 	}
-
 }

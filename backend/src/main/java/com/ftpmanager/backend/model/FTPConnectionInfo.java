@@ -3,7 +3,7 @@ package com.ftpmanager.backend.model;
 import lombok.Data;
 
 @Data
-public class FTPConnectionRequest {
+public class FTPConnectionInfo {
 	private String host;
 	private int port;
 	private String username;

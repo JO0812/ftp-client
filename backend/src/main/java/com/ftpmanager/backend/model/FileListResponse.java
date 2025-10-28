@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class FIleListResponse {
+public class FileListResponse {
 	private List<FileInfo> files;
 	private String currentPath;
 }
