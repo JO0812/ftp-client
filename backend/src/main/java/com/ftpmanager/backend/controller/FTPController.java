@@ -41,10 +41,10 @@ public class FTPController {
 	}
 
 	@PostMapping("/disconnect")
-	public ApiResponse disconnect(FTPConnectionInfo request) {
+	public ApiResponse disconnect() {
 		ApiResponse response = new ApiResponse();
 		response.setSuccess(true);
-		response.setMessage("Disconnected from " + request.getHost());
+		response.setMessage("Disconnected from server");
 		return response;
 	}
 
