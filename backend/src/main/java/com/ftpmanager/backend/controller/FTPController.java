@@ -1,6 +1,7 @@
 package com.ftpmanager.backend.controller;
 
 import com.ftpmanager.backend.model.*;
+import com.ftpmanager.backend.service.FTPService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -10,11 +11,32 @@ import java.util.List;
 @RequestMapping("/api/ftp")
 public class FTPController {
 
+	private final FTPService ftpService;
+
+	public FTPController(FTPService ftpService) {
+		this.ftpService = ftpService;
+	}
+
 	@PostMapping("/connect")
 	public ApiResponse connect(@RequestBody FTPConnectionInfo request) {
+		boolean success = ftpService.connect(
+				request.getHost(),
+				request.getPort(),
+				request.getUsername(),
+				request.getPassword()
+		);
+
 		ApiResponse response = new ApiResponse();
-		response.setSuccess(true);
-		response.setMessage("Connected to " + request.getHost());
+		if (success) {
+			response.setSuccess(true);
+			response.setMessage("Connected to " + request.getHost());
+			response.setError(null);
+		} else {
+			response.setSuccess(false);
+			response.setMessage(null);
+			response.setError(ftpService.getLastError());
+		}
+
 		return response;
 	}
 
