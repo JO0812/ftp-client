@@ -19,13 +19,7 @@ public class FTPController {
 
 	@PostMapping("/connect")
 	public ApiResponse connect(@RequestBody FTPConnectionInfo request) {
-		boolean success = ftpService.connect(
-				request.getHost(),
-				request.getPort(),
-				request.getUsername(),
-				request.getPassword()
-		);
-
+		boolean success = ftpService.connect(request.getHost(), request.getPort(), request.getUsername(), request.getPassword());
 		ApiResponse response = new ApiResponse();
 		if (success) {
 			response.setSuccess(true);
@@ -33,7 +27,7 @@ public class FTPController {
 			response.setError(null);
 		} else {
 			response.setSuccess(false);
-			response.setMessage(null);
+			response.setMessage("Connection error");
 			response.setError(ftpService.getLastError());
 		}
 
@@ -42,9 +36,17 @@ public class FTPController {
 
 	@PostMapping("/disconnect")
 	public ApiResponse disconnect() {
+		boolean success = ftpService.disconnect();
 		ApiResponse response = new ApiResponse();
-		response.setSuccess(true);
-		response.setMessage("Disconnected from server");
+		if (success) {
+			response.setSuccess(true);
+			response.setMessage("Disconnected from server");
+			response.setError(null);
+		} else {
+			response.setSuccess(false);
+			response.setMessage("Disconnection error");
+			response.setError(ftpService.getLastError());
+		}
 		return response;
 	}
 

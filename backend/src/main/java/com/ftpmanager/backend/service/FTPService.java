@@ -42,5 +42,26 @@ public class FTPService {
 			return false;
 		}
 	}
+
+	public boolean disconnect() {
+		try {
+			if (!isConnected) {
+				return true; //if not connected, return true
+			} else {
+				ftpClient.disconnect();
+				currentHost = null;
+				currentDirectory = null;
+				isConnected = false;
+				lastError = null;
+				return true; //if connected, cleanup variables and return true
+			}
+		} catch (Exception e) {
+			lastError = "Disconnection failed: " + e.getMessage();
+			isConnected = false;
+			return false; // if we have an error with the connection, should we cleanup as well and return true?
+		}
+	}
+
+	//public String status()
 }
 
