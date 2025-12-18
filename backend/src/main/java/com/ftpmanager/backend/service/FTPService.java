@@ -45,16 +45,14 @@ public class FTPService {
 
 	public boolean disconnect() {
 		try {
-			if (!isConnected) {
-				return true; //if not connected, return true
-			} else {
+			if (isConnected) {
 				ftpClient.disconnect();
 				currentHost = null;
 				currentDirectory = null;
 				isConnected = false;
 				lastError = null;
-				return true; //if connected, cleanup variables and return true
 			}
+			return true;
 		} catch (Exception e) {
 			lastError = "Disconnection failed: " + e.getMessage();
 			isConnected = false;
