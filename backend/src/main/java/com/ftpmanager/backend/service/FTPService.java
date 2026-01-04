@@ -1,5 +1,6 @@
 package com.ftpmanager.backend.service;
 
+import com.ftpmanager.backend.model.ConnectionStatusResponse;
 import lombok.Getter;
 import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.stereotype.Service;
@@ -60,6 +61,12 @@ public class FTPService {
 		}
 	}
 
-	//public String status()
+	public ConnectionStatusResponse status() {
+		ConnectionStatusResponse response = new ConnectionStatusResponse();
+		response.setConnected(isConnected);
+		response.setHost(currentHost);
+		response.setCurrentDirectory(currentDirectory);
+		return response;
+	}
 }
 

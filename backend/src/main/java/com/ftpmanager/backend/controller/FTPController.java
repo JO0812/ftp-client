@@ -52,11 +52,7 @@ public class FTPController {
 
 	@GetMapping("/status")
 	public ConnectionStatusResponse status() {
-		ConnectionStatusResponse response = new ConnectionStatusResponse();
-		response.setConnected(true);
-		response.setHost("ftp.example.com");
-		response.setCurrentDirectory("/home/usr");
-		return response;
+		return ftpService.status();
 	}
 
 	@GetMapping("/files")
