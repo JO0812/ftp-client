@@ -1,9 +1,15 @@
 package com.ftpmanager.backend.service;
 
 import com.ftpmanager.backend.model.ConnectionStatusResponse;
+import com.ftpmanager.backend.model.FileListResponse;
+import com.ftpmanager.backend.model.FileInfo;
 import lombok.Getter;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -57,7 +63,7 @@ public class FTPService {
 		} catch (Exception e) {
 			lastError = "Disconnection failed: " + e.getMessage();
 			isConnected = false;
-			return false; // if we have an error with the connection, should we cleanup as well and return true?
+			return false; // if we have an error with the connection, should we clean up as well and return true?
 		}
 	}
 
@@ -67,6 +73,33 @@ public class FTPService {
 		response.setHost(currentHost);
 		response.setCurrentDirectory(currentDirectory);
 		return response;
+	}
+
+	public FileListResponse listFiles() {
+		if (!isConnected) {
+			lastError = "Not connected to FTP server";
+			return null;
+		}
+
+		try {
+			FTPFile[] ftpFiles = ftpClient.listFiles();
+			List<FileInfo> fileInfoList = new ArrayList<>();
+			for (FTPFile ftpFile : ftpFiles) {
+				FileInfo info = new FileInfo();
+				info.setName(ftpFile.getName());
+				info.setSize(ftpFile.getSize());
+				info.setDirectory(ftpFile.isDirectory());
+				info.setLastModified(ftpFile.getTimestamp() != null ? ftpFile.getTimestamp().getTime().toString() : "Unknown");
+				fileInfoList.add(info);
+			}
+			FileListResponse response = new FileListResponse();
+			response.setFiles(fileInfoList);
+			response.setCurrentPath(currentDirectory);
+			return response;
+		} catch (Exception e) {
+			lastError = "Failed to list files: " + e.getMessage();
+			return null;
+		}
 	}
 }
 

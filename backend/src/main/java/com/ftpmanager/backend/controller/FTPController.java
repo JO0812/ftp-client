@@ -4,9 +4,6 @@ import com.ftpmanager.backend.model.*;
 import com.ftpmanager.backend.service.FTPService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/ftp")
 public class FTPController {
@@ -57,37 +54,7 @@ public class FTPController {
 
 	@GetMapping("/files")
 	public FileListResponse listFiles() {
-		FileListResponse response = new FileListResponse();
-		List<FileInfo> fileList = new ArrayList<>();
-
-		// Create first file (a PDF document)
-		FileInfo file1 = new FileInfo();
-		file1.setName("document.pdf");
-		file1.setSize(2048);
-		file1.setDirectory(false);
-		file1.setLastModified("2024-10-23 14:30:00");
-		fileList.add(file1);
-
-		// Create second file (a folder)
-		FileInfo file2 = new FileInfo();
-		file2.setName("photos");
-		file2.setSize(0);
-		file2.setDirectory(true);
-		file2.setLastModified("2024-10-20 10:15:00");
-		fileList.add(file2);
-
-		// Create third file (a text file)
-		FileInfo file3 = new FileInfo();
-		file3.setName("readme.txt");
-		file3.setSize(512);
-		file3.setDirectory(false);
-		file3.setLastModified("2024-10-22 09:00:00");
-		fileList.add(file3);
-
-		response.setFiles(fileList);
-		response.setCurrentPath("/home/user/documents");
-
-		return response;
+		return ftpService.listFiles();
 	}
 
 	@PostMapping("/change-directory")
