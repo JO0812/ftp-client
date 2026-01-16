@@ -1,5 +1,6 @@
 package com.ftpmanager.backend.service;
 
+import com.ftpmanager.backend.model.ChangeDirectoryResponse;
 import com.ftpmanager.backend.model.ConnectionStatusResponse;
 import com.ftpmanager.backend.model.FileListResponse;
 import com.ftpmanager.backend.model.FileInfo;
@@ -99,6 +100,35 @@ public class FTPService {
 		} catch (Exception e) {
 			lastError = "Failed to list files: " + e.getMessage();
 			return null;
+		}
+	}
+
+	public ChangeDirectoryResponse changeDirectory(String path) {
+		if (!isConnected) {
+			lastError = "Not connected to FTP server";
+			ChangeDirectoryResponse response = new ChangeDirectoryResponse();
+			response.setSuccess(false);
+			return response;
+		}
+
+		try {
+			boolean success = ftpClient.changeWorkingDirectory(path);
+			ChangeDirectoryResponse response = new ChangeDirectoryResponse();
+			response.setSuccess(success);
+			response.setCurrentPath(this.currentDirectory);
+			response.setNewPath(ftpClient.printWorkingDirectory());
+
+			if (success) {
+				this.currentDirectory = ftpClient.printWorkingDirectory();
+			}
+
+			return response;
+
+		} catch (Exception e) {
+			lastError = "Failed to change directory: " + e.getMessage();
+			ChangeDirectoryResponse response = new ChangeDirectoryResponse();
+			response.setSuccess(false);
+			return response;
 		}
 	}
 }

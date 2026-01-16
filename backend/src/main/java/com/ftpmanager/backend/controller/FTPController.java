@@ -58,11 +58,8 @@ public class FTPController {
 	}
 
 	@PostMapping("/change-directory")
-	public ApiResponse changeDirectory(@RequestBody DirectoryRequest request) {
-		ApiResponse response = new ApiResponse();
-		response.setSuccess(true);
-		response.setMessage("Changed dir to " + request.getPath());
-		return response;
+	public ChangeDirectoryResponse changeDirectory(@RequestBody DirectoryRequest request) {
+		return ftpService.changeDirectory(request.getPath());
 	}
 
 	@PostMapping("/upload")
